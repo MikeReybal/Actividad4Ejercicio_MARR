@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Car Catalog</title>
+  </head>
+  <body>
+    <h1>Car Catalog</h1>
+    <form>
+      <label>
+        Brand:
+        <input type="text" name="brand">
+      </label>
+      <br>
+      <label>
+        Model:
+        <input type="text" name="model">
+      </label>
+      <br>
+      <label>
+        Year:
+        <input type="number" name="year">
+      </label>
+      <br>
+      <label>
+        Cost:
+        <input type="number" name="cost">
+      </label>
+      <br>
+      <label>
+        Color:
+        <input type="text" name="color">
+      </label>
+      <br>
+      <button type="submit">Add Car</button>
+    </form>
+
+    <h2>Cars</h2>
+    <ul id="car-list"></ul>
+
+    <form>
+      <label>
+        Search by Brand:
+        <input type="text" name="search-brand">
+      </label>
+      <button type="submit">Search</button>
+    </form>
+    <ul id="search-results"></ul>
+
+    <script>
+      const cars = [];
+
+      function addCar(event) {
+        event.preventDefault();
+        const form = event.target;
+        const car = {
+          brand: form.elements.brand.value,
+          model: form.elements.model.value,
+          year: form.elements.year.value,
+          cost: form.elements.cost.value,
+          color: form.elements.color.value
+        };
+        cars.push(car);
+        form.reset();
+        displayCars();
+      }
+
+      function displayCars() {
+        const carListElement = document.getElementById("car-list");
+        carListElement.innerHTML = "";
+        for (const car of cars) {
+          const carElement = document.createElement("li");
+          carElement.textContent = `${car.brand} ${car.model} (${car.year}) - $${car.cost} - ${car.color}`;
+          carListElement.appendChild(carElement);
+        }
+      }
+
+      function searchCars(event) {
+        event.preventDefault();
+        const searchTerm = event.target.elements["search-brand"].value.toLowerCase();
+        const searchResultsElement = document.getElementById("search-results");
+        searchResultsElement.innerHTML = "";
+        for (const car of cars) {
+          if (car.brand.toLowerCase().includes(searchTerm)) {
+            const carElement = document.createElement("li");
+            carElement.textContent = `${car.brand} ${car.model} (${car.year}) - $${car.cost} - ${car.color}`;
+            searchResultsElement.appendChild(carElement);
+          }
+        }
+      }
+
+      const form = document.querySelector("form");
+      form.addEventListener("submit", addCar);
+
+      const searchForm = document.querySelector("form:last-of-type");
+      searchForm.addEventListener("submit", searchCars);
+    </script>
+  </body>
+</html>
